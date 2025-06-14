@@ -1,13 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import subprocess
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
 CORS(app)
 
 @app.route('/')
 def home():
-    return "✅ ReconX Flask Backend is running."
+    return render_template('index.html')  # Loads templates/index.html
 
 @app.route('/run_recon', methods=['POST'])
 def run_recon():
@@ -18,8 +18,8 @@ def run_recon():
         return jsonify({'output': '❌ No target provided.'})
 
     try:
-        # Call your CLI tool from main.py here
-        result = subprocess.check_output(['python', 'main.py', target])  # Use 'python' on Windows
+        # Make sure main.py exists and accepts the target as an argument
+        result = subprocess.check_output(['python', 'main.py', target], stderr=subprocess.STDOUT)
         return jsonify({'output': result.decode()})
     
     except subprocess.CalledProcessError as e:
