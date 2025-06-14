@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import subprocess
+import os
 
 app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
 CORS(app)
@@ -18,13 +19,14 @@ def run_recon():
         return jsonify({'output': '❌ No target provided.'})
 
     try:
-        # Make sure main.py exists and accepts the target as an argument
-        result = subprocess.check_output(['python', 'main.py', target], stderr=subprocess.STDOUT)
+        # Run reconx/main.py with the given target
+        recon_path = os.path.join('reconx', 'main.py')
+        result = subprocess.check_output(['python', recon_path, target], stderr=subprocess.STDOUT)
         return jsonify({'output': result.decode()})
-    
+
     except subprocess.CalledProcessError as e:
-        return jsonify({'output': f"❌ Recon failed:\n{e.output.decode()}"} if e.output else "❌ Recon failed (no output)")
-    
+        return jsonify({'output': f"❌ Recon failed:\n{e.output.decode()}"} if e.output else "❌ Recon failed (no output)" )
+
     except Exception as e:
         return jsonify({'output': f"⚠️ Unexpected error: {str(e)}"})
 
