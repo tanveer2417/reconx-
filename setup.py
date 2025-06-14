@@ -21,7 +21,8 @@ setup(
         'beautifulsoup4',
         'tldextract',
         'dnspython',
-        'selenium'
+        'selenium',
+        'bing'
     ],
     author='Mariya Fareed, Ruheena Begum, Tanveer Fatima',
     description='Automated OSINT and Recon CLI tool',
