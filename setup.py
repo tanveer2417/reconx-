@@ -7,20 +7,20 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'reconx = reconx.main:main',  # Make sure this path is correct!
+            'reconx = reconx.main:main',
         ],
     },
     install_requires=[
-        'termcolor'
-        'tabulate'
-        'requests'
-        'googlesearch-python'
-        'python-whois'
-        'colorama'
-        'urllib3'
-        'beautifulsoup4'
-        'tldextract'
-        'dnspython'
+        'termcolor',
+        'tabulate',
+        'requests',
+        'googlesearch-python',
+        'python-whois',
+        'colorama',
+        'urllib3',
+        'beautifulsoup4',
+        'tldextract',
+        'dnspython',
         'selenium'
     ],
     author='Mariya Fareed, Ruheena Begum, Tanveer Fatima',

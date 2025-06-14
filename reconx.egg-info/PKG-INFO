@@ -12,7 +12,17 @@ Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
-Requires-Dist: termcolortabulaterequestsgooglesearch-pythonpython-whoiscoloramaurllib3beautifulsoup4tldextractdnspythonselenium
+Requires-Dist: termcolor
+Requires-Dist: tabulate
+Requires-Dist: requests
+Requires-Dist: googlesearch-python
+Requires-Dist: python-whois
+Requires-Dist: colorama
+Requires-Dist: urllib3
+Requires-Dist: beautifulsoup4
+Requires-Dist: tldextract
+Requires-Dist: dnspython
+Requires-Dist: selenium
 Dynamic: author
 Dynamic: classifier
 Dynamic: description
