@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ReconX - Automated Recon Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ ReconX</h1>
+        <p>Automated Reconnaissance Tool for Ethical Hackers</p>
+
+        <input type="text" id="targetInput" placeholder="Enter target domain or IP (e.g. example.com)" />
+        <button onclick="runRecon()">Run Recon</button>
+
+        <div id="loading" class="hidden">🔍 Running Recon...</div>
+        <pre id="output"></pre>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
