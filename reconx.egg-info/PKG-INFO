@@ -1,0 +1,35 @@
+Metadata-Version: 2.4
+Name: reconx
+Version: 1.0.0
+Summary: Automated OSINT and Recon CLI tool
+Home-page: https://github.com/tanveer2417/ReconX
+Author: Mariya Fareed, Ruheena Begum, Tanveer Fatima
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: Security
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: termcolor
+Requires-Dist: tabulate
+Requires-Dist: requests
+Requires-Dist: googlesearch-python
+Requires-Dist: python-whois
+Requires-Dist: colorama
+Requires-Dist: urllib3
+Requires-Dist: beautifulsoup4
+Requires-Dist: tldextract
+Requires-Dist: dnspython
+Requires-Dist: selenium
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+ReconX is a Python-based command-line tool for automating OSINT and reconnaissance tasks. It supports subdomain enumeration, metadata extraction, WHOIS, DNS, IP info lookup, GitHub dorks, and more.
