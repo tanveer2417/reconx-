@@ -1,0 +1,10 @@
+dev.microsoft.com
+cdn.microsoft.com
+microsoft.com
+support.microsoft.com
+www.microsoft.com
+portal.microsoft.com
+admin.microsoft.com
+api.microsoft.com
+assets.microsoft.com
+ftp.microsoft.com
