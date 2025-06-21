@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Scan History - ReconX{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-history me-2"></i>
+            Scan History
+        </h1>
+        <div>
+            <a href="{{ url_for('scan') }}" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>New Scan
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+            </a>
+        </div>
+    </div>
+    
+    {% if scans.items %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Modules</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Completed</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for scan in scans.items %}
+                        <tr>
+                            <td>
+                                <i class="fas fa-globe me-1"></i>
+                                {{ scan.domain }}
+                            </td>
+                            <td>
+                                {% set modules = scan.modules|from_json %}
+                                {% for module in modules %}
+                                <span class="badge bg-secondary me-1">{{ module }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if scan.status == 'completed' %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Completed
+                                </span>
+                                {% elif scan.status == 'running' %}
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-spinner fa-spin me-1"></i>Running
+                                </span>
+                                {% elif scan.status == 'failed' %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times me-1"></i>Failed
+                                </span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ scan.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ scan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                {% if scan.completed_at %}
+                                {{ scan.completed_at.strftime('%Y-%m-%d %H:%M') }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if scan.status == 'completed' %}
+                                <a href="{{ url_for('results', scan_id=scan.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye me-1"></i>View
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if scans.pages > 1 %}
+            <nav aria-label="Scan history pagination">
+                <ul class="pagination justify-content-center">
+                    {% if scans.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('history', page=scans.prev_num) }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in scans.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != scans.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('history', page=page_num) }}">{{ page_num }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_num }}</span>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if scans.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('history', page=scans.next_num) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-radar fa-3x text-muted mb-3"></i>
+            <h5>No scans found</h5>
+            <p class="text-muted">You haven't performed any reconnaissance scans yet.</p>
+            <a href="{{ url_for('scan') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Start First Scan
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

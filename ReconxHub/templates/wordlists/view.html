@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}{{ wordlist.name }} - ReconX{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-list me-2"></i>
+            {{ wordlist.name }}
+        </h1>
+        <div>
+            <a href="{{ url_for('download_wordlist', wordlist_id=wordlist.id) }}" class="btn btn-success">
+                <i class="fas fa-download me-1"></i>Download
+            </a>
+            <a href="{{ url_for('wordlists') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Wordlists
+            </a>
+        </div>
+    </div>
+    
+    <!-- Wordlist Info -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Wordlist Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <strong>Name:</strong> {{ wordlist.name }}
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Type:</strong> 
+                            <span class="badge bg-{% if wordlist.wordlist_type == 'subdomain' %}info{% else %}warning{% endif %}">
+                                {% if wordlist.wordlist_type == 'subdomain' %}
+                                <i class="fas fa-sitemap me-1"></i>Subdomain
+                                {% else %}
+                                <i class="fas fa-folder me-1"></i>Directory
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-6">
+                            <strong>Word Count:</strong> {{ wordlist.word_count:,}} words
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Created:</strong> {{ wordlist.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-6">
+                            <strong>Original File:</strong> {{ wordlist.filename }}
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Status:</strong> 
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Usage Stats</h6>
+                    <h2 class="text-primary">{{ total_words:,}}</h2>
+                    <p class="text-muted">Total Words</p>
+                    {% if wordlist.wordlist_type == 'subdomain' %}
+                    <small class="text-muted">Use for subdomain brute-forcing</small>
+                    {% else %}
+                    <small class="text-muted">Use for directory enumeration</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wordlist Preview -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-eye me-2"></i>
+                Preview (First 100 words)
+            </h5>
+            {% if total_words > 100 %}
+            <small class="text-muted">Showing 100 of {{ total_words:,}} words</small>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if preview_words %}
+            <div class="row">
+                {% for word in preview_words %}
+                <div class="col-md-3 col-sm-4 col-6 mb-1">
+                    <code>{{ word }}</code>
+                </div>
+                {% endfor %}
+            </div>
+            {% if total_words > 100 %}
+            <hr>
+            <div class="text-center">
+                <p class="text-muted mb-2">
+                    <i class="fas fa-ellipsis-h"></i>
+                    And {{ total_words - 100 }} more words...
+                </p>
+                <a href="{{ url_for('download_wordlist', wordlist_id=wordlist.id) }}" class="btn btn-outline-primary">
+                    <i class="fas fa-download me-1"></i>Download Complete Wordlist
+                </a>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-exclamation-triangle fa-2x text-muted mb-3"></i>
+                <p class="text-muted">No words found in this wordlist</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="mt-4 text-center">
+        <div class="btn-group" role="group">
+            <a href="{{ url_for('scan') }}" class="btn btn-primary">
+                <i class="fas fa-radar me-1"></i>Use in Scan
+            </a>
+            <a href="{{ url_for('download_wordlist', wordlist_id=wordlist.id) }}" class="btn btn-success">
+                <i class="fas fa-download me-1"></i>Download
+            </a>
+            <button type="button" class="btn btn-danger" 
+                    onclick="deleteWordlist({{ wordlist.id }}, '{{ wordlist.name }}')">
+                <i class="fas fa-trash me-1"></i>Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the wordlist "<strong id="wordlistName"></strong>"?</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Wordlist</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteWordlist(wordlistId, wordlistName) {
+    document.getElementById('wordlistName').textContent = wordlistName;
+    document.getElementById('deleteForm').action = '/wordlists/' + wordlistId + '/delete';
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

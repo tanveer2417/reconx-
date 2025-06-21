@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Wordlist - ReconX{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-upload me-2"></i>
+                        Upload Wordlist
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Wordlist Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   placeholder="Enter a descriptive name" required maxlength="255">
+                            <div class="form-text">Give your wordlist a memorable name</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Wordlist Type</label>
+                            <select class="form-select" id="type" name="type" required>
+                                <option value="">Select type...</option>
+                                <option value="subdomain">Subdomain Enumeration</option>
+                                <option value="directory">Directory Enumeration</option>
+                            </select>
+                            <div class="form-text">Choose how this wordlist will be used</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="wordlist_file" class="form-label">Wordlist File</label>
+                            <input type="file" class="form-control" id="wordlist_file" name="wordlist_file" 
+                                   accept=".txt,.list,.wordlist" required>
+                            <div class="form-text">
+                                Supported formats: .txt, .list, .wordlist (max 16MB, 10,000 words)
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Wordlist Guidelines
+                            </h6>
+                            <ul class="mb-0">
+                                <li>One word per line</li>
+                                <li>UTF-8 text encoding</li>
+                                <li>Maximum 10,000 words</li>
+                                <li>No special characters in filenames</li>
+                                <li>Subdomain wordlists: common subdomains (www, api, admin, etc.)</li>
+                                <li>Directory wordlists: common directories (/admin, /login, etc.)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('wordlists') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-upload me-1"></i>Upload Wordlist
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Sample Wordlists Info -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Sample Wordlists
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Subdomain Examples:</strong></p>
+                    <code class="d-block mb-3">www<br>api<br>admin<br>mail<br>ftp<br>dev<br>staging<br>test</code>
+                    
+                    <p class="mb-2"><strong>Directory Examples:</strong></p>
+                    <code class="d-block">admin<br>login<br>dashboard<br>wp-admin<br>api<br>files<br>backup</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
