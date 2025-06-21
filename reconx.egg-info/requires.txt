@@ -1,0 +1,11 @@
+termcolor
+tabulate
+requests
+googlesearch-python
+python-whois
+colorama
+urllib3
+beautifulsoup4
+tldextract
+dnspython
+selenium
